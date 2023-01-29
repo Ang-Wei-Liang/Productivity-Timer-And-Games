@@ -9,7 +9,7 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
-
+  //ok
   //TextInput,
 } from 'react-native';
 import Constants from 'expo-constants';
