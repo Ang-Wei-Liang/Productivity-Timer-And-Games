@@ -1,0 +1,88 @@
+function MainScreen(props) {
+  return (
+    <NavigationContainer
+    independent={true}>
+      
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            if (route.name === 'Timer') {
+              return (
+                <Image
+                  source={
+                    focused
+                      ? require('./assets/timer_focused.png')
+                      : require('./assets/timer.png')
+                  }
+                  style={{
+                    height: 30,
+                    width: 34,
+                  }}
+                />
+              );
+            } else if (route.name === 'Games') {
+              return (
+                <Image
+                  source={
+                    focused
+                      ? require('./assets/controller_focused.png')
+                      : require('./assets/controller.png')
+                  }
+                  style={{
+                    height: 35,
+                    width: 50,
+                    marginTop: 10,
+                  }}
+                />
+              );
+            } else if (route.name === 'Shop') {
+              return (
+                <Image
+                  source={
+                    focused
+                      ? require('./assets/cart_focused.png')
+                      : require('./assets/cart.png')
+                  }
+                  style={{
+                    height: 36,
+                    width: 36,
+                    marginTop: 2,
+                  }}
+                />
+              );
+            } else if (route.name === 'Rewards') {
+              return (
+                <Image
+                  source={
+                    focused
+                      ? require('./assets/rewards_focused.png')
+                      : require('./assets/rewards.png')
+                  }
+                  style={{
+                    height: 35,
+                    width: 35,
+                    marginTop: 5,
+                  }}
+                />
+              );
+            }
+            // You can return any component that you like here!
+            return <Text>{route.name}</Text>;
+          },
+          tabBarActiveTintColor: 'tomato',
+          tabBarInactiveTintColor: 'gray',
+          headerShown: false,
+        })}>
+        
+        
+        <Tab.Screen name="Timer" component={TimerStack} />
+        <Tab.Screen name="Games" component={GamesStack} />
+        <Tab.Screen name="Shop" component={ShopStack} />
+        <Tab.Screen name="Rewards" component={RewardsStack} />
+      </Tab.Navigator>
+    </NavigationContainer>
+
+
+  )};
+
+  export default MainScreen;

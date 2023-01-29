@@ -1,0 +1,24 @@
+<ImageBackground source={image} resizeMode="cover" style={styles.image}>
+
+</ImageBackground>
+
+/*<MoneyTrack/>
+  <DropDown/>*/
+
+/*<MoneyTrack onPress={() => console.log("yes")} />*/
+
+
+<>
+    
+    <View style={styles.container}>
+    <View style={styles.adjustLogin}>
+    <ButtonSign onPress={() => console.log("yes")} />
+    </View>
+    <View style={styles.adjustMoney} >
+    <MoneyTrack/>
+    </View>
+    <View style={styles.containerAbsolute}>
+    <View style={styles.textContainer}>
+    <Text style={styles.text1} >Home</Text>
+    <Text style={styles.text2}>Hi there! Nice to meet you!</Text>
+    </View>

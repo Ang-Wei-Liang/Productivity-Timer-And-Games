@@ -1,0 +1,10 @@
+First priority
+Need to store number of coins in firebase first.
+Need to make changes to shop page while the user pressed the items it need to reduce from coin database.
+Need to store names from Rewards page and while the name is searched, it needs to show name
+ 
+Extra
+While press to Sign in, need to go into another page of Sign in 
+In Sign up page, add confirm password catagory 
+While password is entered, need to check that password has 8 charachers and while less than 8 characters the rocket logo at the top page changed to red color and 
+while correct the rocket changed to green.
