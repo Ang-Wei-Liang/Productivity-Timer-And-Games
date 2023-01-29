@@ -1,113 +1,157 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import Constants from 'expo-constants';
+import React, {useEffect, useState} from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
+import Constants from "expo-constants";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import { auth } from '../firebase';
-import { useNavigation } from '@react-navigation/native';
-
-//import MainScreen from '../Main';
+import {auth} from "../firebase";
+import {useNavigation} from "@react-navigation/native";
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
 
 function SignUpPage(props) {
-  const [email, setEmail] = useState('')
-  const [password,setPassword] = useState('')
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigation.replace("Main")
+        navigation.replace("Main");
       }
-    })
+    });
 
-    return unsubscribe
-  }, [])
+    return unsubscribe;
+  }, []);
 
-  const handleSignUp = () => {
-    auth
-    .createUserWithEmailAndPassword(email, password)
-    .then(userCredentials => {
-      const user = userCredentials.user;
-      console.log("Registered with:", user.email);
-    })
-    .catch(error => alert(error.message));
-  }
+  const handleSignUp = async () => {
+    const userCredentials = await auth.createUserWithEmailAndPassword(email, password);
+    const user = userCredentials.user;
+    console.log("Registered with:", user.email);
 
-  const handleLogin = () => {
-    auth
-    .signInWithEmailAndPassword(email, password)
-    .then(userCredentials => {
+    // Create a reference to the Firestore collection
+    const collectionRef = firebase.firestore().collection("users");
+    collectionRef
+      .add({
+        email: user.email,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+      .then(function () {
+        alert("Account successfully created!");
+      })
+      .catch(function (error) {
+        alert.error("Error writing document: ", error);
+      });
+  };
+
+  const handleLogin = async () => {
+    try {
+      const userCredentials = await auth.signInWithEmailAndPassword(email, password);
       const user = userCredentials.user;
       console.log("Logged in with:", user.email);
-    })
-    .catch(error => alert(error.message));
-  }
+
+      // Create a reference to the Firestore collection
+      const collectionRef = firebase.firestore().collection("users");
+      // check if document with user id exists in the collection
+      const docRef = collectionRef.doc(user.uid);
+      const docSnapshot = await docRef.get();
+
+      if (!docSnapshot.exists) {
+        // if the document does not exist, add the user data to the collection
+        collectionRef
+          .doc(user.uid)
+          .set({
+            email: user.email,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+          .then(() => {
+            alert("User successfully registered!");
+          })
+          .catch((error) => {
+            alert.error("Error writing document: ", error);
+          });
+      } else {
+        alert("Welcome!!");
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   return (
-    <TouchableWithoutFeedback onPress={() => {
-      Keyboard.dismiss();
-      console.log("Dismiss");
-    }}>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss();
+        console.log("Dismiss");
+      }}
+    >
+      <View style={styles.container}>
+        <Icon name="rocket" size={32} color="#900" />
 
+        <Text style={styles.containerTitles}> Email </Text>
+        <TextInput
+          style={[styles.input, styles.input.one]}
+          placeholder="Your email address"
+          //value={email}
+          onChangeText={(text) => setEmail(text)}
+        />
+        <Text style={styles.containerTitles}> Password </Text>
+        <TextInput
+          style={[styles.input, styles.input.two]}
+          placeholder="Your password"
+          //value={password}
+          onChangeText={(text) => setPassword(text)}
+          secureTextEntry={true}
+        />
 
-    <View style={styles.container}>
-    
-    <Icon name="rocket" size={32} color="#900" />
+        <Text style={styles.positionText}>
+          {" "}
+          ✅ I agree to the<Text style={styles.textStyle}> Terms of Services</Text> and
+          <Text style={styles.textStyle}> Private Policy </Text>
+        </Text>
 
-    
-      <Text style={styles.containerTitles}> Email </Text>
-      <TextInput 
-        style={[styles.input, styles.input.one]}
-        placeholder="Your email address"
-        //value={email}
-        onChangeText={text => setEmail(text)}
-      />
-      <Text style={styles.containerTitles} > Password </Text>
-      <TextInput 
-        style={[styles.input, styles.input.two]}
-        placeholder="Your password"
-        //value={password}
-        onChangeText={text => setPassword(text)}
-        secureTextEntry={true}
-      />
-      
-      <Text style={styles.positionText}> ✅ I agree to the<Text style={styles.textStyle}> Terms of Services</Text> and<Text style={styles.textStyle}> Private Policy </Text></Text>
+        <TouchableOpacity onPress={handleSignUp} style={styles.button}>
+          <Text style={styles.buttonText}>Continue</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress = {handleSignUp}
-        style={styles.button} >
-        <Text style={styles.buttonText}>Continue</Text>
-      </TouchableOpacity>
-
-      <Text> Have an account? 
-        <TouchableOpacity onPress={handleLogin}><Text style={styles.textStyle}>Sign In </Text></TouchableOpacity>
-      </Text>
-    </View>
-
+        <Text>
+          {" "}
+          Have an account?
+          <TouchableOpacity onPress={handleLogin}>
+            <Text style={styles.textStyle}>Sign In </Text>
+          </TouchableOpacity>
+        </Text>
+      </View>
     </TouchableWithoutFeedback>
   );
 }
-
 
 export default SignUpPage;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingTop: Constants.statusBarHeight,
   },
   containerTitles: {
-    position: 'relative',
+    position: "relative",
     right: 100,
     marginTop: 15,
   },
   adjustIcon: {
-     position: 'absolute',
-     top: 80,
-     left: 40,
-     
+    position: "absolute",
+    top: 80,
+    left: 40,
   },
   title: {
     fontSize: 24,
@@ -116,42 +160,42 @@ const styles = StyleSheet.create({
     /*position: 'absolute',
     top: 80,
     right: 200,*/
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   input: {
-    width: '80%',
+    width: "80%",
     padding: 12,
     margin: 8,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     one: {
-       backgroundColor: 'lightgreen'
+      backgroundColor: "lightgreen",
     },
     two: {
-      backgroundColor: 'yellow'
-    }
+      backgroundColor: "yellow",
+    },
   },
-  
+
   button: {
-    backgroundColor: 'green',
+    backgroundColor: "green",
     padding: 12,
     marginBottom: 12,
     marginTop: 44,
     borderRadius: 8,
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   positionText: {
     position: "relative",
     left: -3,
-    fontSize: 10
+    fontSize: 10,
   },
   textStyle: {
-    color: 'darkgreen',
-    fontWeight: 'bold',
-  }
+    color: "darkgreen",
+    fontWeight: "bold",
+  },
 });
