@@ -118,17 +118,16 @@ function SignUpPage(props) {
           <Text style={styles.textStyle}> Private Policy </Text>
         </Text>
 
-        <TouchableOpacity onPress={handleSignUp} style={styles.button}>
-          <Text style={styles.buttonText}>Continue</Text>
+        <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity onPress={handleSignUp} style={styles.button1}>
+          <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
 
-        <Text>
-          {" "}
-          Have an account?
-          <TouchableOpacity onPress={handleLogin}>
-            <Text style={styles.textStyle}>Sign In </Text>
-          </TouchableOpacity>
-        </Text>
+        <TouchableOpacity onPress={handleLogin} style={styles.button2}>
+          <Text style={styles.buttonText}>Sign In</Text>
+        </TouchableOpacity>
+        </View>
+        
       </View>
     </TouchableWithoutFeedback>
   );
@@ -177,11 +176,20 @@ const styles = StyleSheet.create({
     },
   },
 
-  button: {
+  button1: {
     backgroundColor: "green",
     padding: 12,
-    marginBottom: 12,
+    marginBottom: 2,
     marginTop: 44,
+    marginHorizontal: 21,
+    borderRadius: 8,
+  },
+  button2: {
+    backgroundColor: "blue",
+    padding: 12,
+    marginBottom: 2,
+    marginTop: 44,
+    marginHorizontal: 26,
     borderRadius: 8,
   },
   buttonText: {
