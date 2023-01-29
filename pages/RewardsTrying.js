@@ -9,7 +9,7 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
-  //ok
+
   //TextInput,
 } from 'react-native';
 import Constants from 'expo-constants';
@@ -41,6 +41,7 @@ const Item = ({ name, onPress, isSelected, onFavoritePress, navigation }) => {
   const [focused, setFocused] = useState(isSelected);
   const style = styles.normal; // Add default value for style prop
  
+
   const handlePress = () => {
     setFocused(!focused);
   };
@@ -63,8 +64,12 @@ const Item = ({ name, onPress, isSelected, onFavoritePress, navigation }) => {
   );
 };
 
-const TextInputTop = ( {setSearch}) => {
+const TextInputTop = ({ setSearch }) => {
+
+  const [searchInput, setSearchInput] = React.useState('Useless Text');
   const [text, onChangeText] = React.useState('Useless Text');
+  const [number, onChangeNumber] = React.useState(null);
+
   
 
   return (
@@ -72,16 +77,13 @@ const TextInputTop = ( {setSearch}) => {
       <Stack spacing={2} style={styles.input}>
         <TextInput
           maxLength={15}
-          label=""
-          
-          variant="outlined"
-          
-
+          label="Search"
           onChangeText={text => {
-          onChangeText(text);
-          setSearch(text);
+            onChangeText(text);
+            setSearch(text);
           }}
-
+          variant="outlined"
+          placeholder="Search"
           trailing={(props) => (
             <IconButton
               icon={(props) => <Icon name="text-search" {...props} />}
@@ -108,15 +110,13 @@ function Rewards3Screen(props) {
     { id: '9', name: 'Igloo', isFavorite: false },
   ]);
 
+  const filteredItems = items.filter(item =>
+    item.name.toLowerCase().includes(search.toLowerCase())
+  );
 
-    const [search, setSearch] = React.useState('');
-    const [selected, setSelected] = useState(new Map());
-    
-    const filteredItems = items.filter(item =>
-        item.name.toLowerCase().includes(search.toLowerCase())
-    );
+  const [search, setSearch] = useState('');
+  //const [style, setStyle] = useState(styles.normal);
 
-  
   const onFavoritePress = (id) => {
     const updatedItems = items.map((item) => {
       if (item.id === id) {
@@ -140,12 +140,12 @@ function Rewards3Screen(props) {
           console.log('Dismiss');
         }}>
         
+
         <View style={styles.container}>
         
-          <TextInputTop setSearch={setSearch}/>
+          <TextInputTop />
 
           <View style={{ flex: 1, margin: 13 }}>
-            
             <FlatList
               scrollEnabled={true}
               //keyboardShouldPersistTaps = {always}
