@@ -42,6 +42,7 @@ function SignUpPage(props) {
     collectionRef
       .add({
         email: user.email,
+        coin: 0,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(function () {
