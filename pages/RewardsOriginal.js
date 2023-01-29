@@ -40,7 +40,10 @@ function generateColor() {
 const Item = ({ name, onPress, isSelected, onFavoritePress, navigation }) => {
   const [focused, setFocused] = useState(isSelected);
   const style = styles.normal; // Add default value for style prop
- 
+  const [searchInput, setSearchInput] = useState('');
+
+  
+
   const handlePress = () => {
     setFocused(!focused);
   };
@@ -63,32 +66,26 @@ const Item = ({ name, onPress, isSelected, onFavoritePress, navigation }) => {
   );
 };
 
-const TextInputTop = ( {setSearch}) => {
+const TextInputTop = () => {
   const [text, onChangeText] = React.useState('Useless Text');
-  
+  const [number, onChangeNumber] = React.useState(null);
 
   return (
     <SafeAreaView>
       <Stack spacing={2} style={styles.input}>
         <TextInput
           maxLength={15}
-          label=""
+          label="Search"
           
           variant="outlined"
-          
-
-          onChangeText={text => {
-          onChangeText(text);
-          setSearch(text);
-          }}
-
+          placeholder="Search"
           trailing={(props) => (
             <IconButton
               icon={(props) => <Icon name="text-search" {...props} />}
               {...props}
             />
           )}
-          
+          onChangeText={onChangeNumber}
         />
       </Stack>
     </SafeAreaView>
@@ -108,15 +105,8 @@ function Rewards3Screen(props) {
     { id: '9', name: 'Igloo', isFavorite: false },
   ]);
 
+  //const [style, setStyle] = useState(styles.normal);
 
-    const [search, setSearch] = React.useState('');
-    const [selected, setSelected] = useState(new Map());
-    
-    const filteredItems = items.filter(item =>
-        item.name.toLowerCase().includes(search.toLowerCase())
-    );
-
-  
   const onFavoritePress = (id) => {
     const updatedItems = items.map((item) => {
       if (item.id === id) {
@@ -140,16 +130,16 @@ function Rewards3Screen(props) {
           console.log('Dismiss');
         }}>
         
+
         <View style={styles.container}>
         
-          <TextInputTop setSearch={setSearch}/>
+          <TextInputTop />
 
           <View style={{ flex: 1, margin: 13 }}>
-            
             <FlatList
               scrollEnabled={true}
               //keyboardShouldPersistTaps = {always}
-              data={filteredItems}
+              data={items}
               renderItem={({ item }) => (
                 <View
                   style={[
