@@ -12,7 +12,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //import { createDrawerNavigator, DrawerItems } from '@react-navigation/drawer';
-
+import { PracticeProvider,PracticeContext } from './Global/PracticeContext';
 //let { StyleSheet } = React;
 
 import TimerScreen from './pages/HomeAndTimer.js';
@@ -77,22 +77,26 @@ function GamesStack() {
 
 function ShopStack() {
   return (
+    <PracticeProvider>
     <Stack.Navigator initialRouteName="Shop">
       <Stack.Screen name="Shop 🛍️" component={ShopScreen} />
       <Stack.Screen name="Productivity Timer1" component={TimerScreen} />
       <Stack.Screen name="Games2" component={GamesScreen} />
       <Stack.Screen name="Rewards3" component={RewardsScreen} />
     </Stack.Navigator>
+    </PracticeProvider>
   );
 }
 function RewardsStack() {
   return (
+    <PracticeProvider>
     <Stack.Navigator initialRouteName="Rewards">
       <Stack.Screen name="Rewards 🏆" component={RewardsScreen} />
       <Stack.Screen name="Productivity Timer2" component={TimerScreen} />
       <Stack.Screen name="Games3" component={GamesScreen} />
       <Stack.Screen name="Shop4" component={ShopScreen} />
     </Stack.Navigator>
+    </PracticeProvider>
   );
 }
 
@@ -181,6 +185,7 @@ function MainScreen(props) {
         <Tab.Screen name="Shop" component={ShopStack} />
         <Tab.Screen name="Rewards" component={RewardsStack} />
       </Tab.Navigator>
+    
     
 
 

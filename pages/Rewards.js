@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, createContext } from 'react';
 import {
   View,
   Text,
@@ -15,11 +15,17 @@ import {
 import Constants from 'expo-constants';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import { PracticeProvider,PracticeContext } from '../Global/PracticeContext';
+
 import { Button } from '@react-native-material/core';
 import { Stack, TextInput, IconButton } from '@react-native-material/core';
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
+import ShopScreen from './Shop.js';
+
+//import { PracticeProvider } from '../Global/PracticeContext';
 
 import { useFonts } from 'expo-font';
+import { isUndefined } from 'lodash';
 
 //import { NeomorphBox } from 'react-native-neomorph-shadows';
 
@@ -98,6 +104,21 @@ const TextInputTop = ( {setSearch}) => {
 };
 
 function Rewards3Screen(props) {
+  //const DataContext = createContext();
+  //const { label } = useContext(DataContext);
+
+  const { data, setData } = useContext(PracticeContext)
+
+  console.log("The label is" + data)
+
+  if(data !== 'None' && data !== undefined){
+    setItems([...items, { id: `${items.length + 1}`, name: label, isFavorite: false }]);
+  }
+
+  const addItem = (label) => {
+    setItems([...items, { id: `${items.length + 1}`, name: label, isFavorite: false }]);
+  };
+
   const [items, setItems] = useState([
     { id: '1', name: 'Alice', isFavorite: false },
     { id: '2', name: 'Bob', isFavorite: false },
@@ -117,6 +138,9 @@ function Rewards3Screen(props) {
     const filteredItems = items.filter(item =>
         item.name.toLowerCase().includes(search.toLowerCase())
     );
+
+    
+  
 
   
   const onFavoritePress = (id) => {

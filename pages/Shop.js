@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useContext, createContext } from 'react';
 import {
   View,
   Text,
@@ -15,10 +15,12 @@ import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 //import MoneyTrack from './MoneyTrack.js';
 
 import { forwardRef, useRef } from 'react';
+import { PracticeProvider,PracticeContext } from '../Global/PracticeContext';
+
 
 //import {Divider} from '@rneui/themed';
 
-
+//import { PracticeProvider } from '../Global/PracticeContext';
 
 
 
@@ -179,6 +181,9 @@ const Col3 = ({ onPress2 }) => {
 };
 
 function ShopScreen(props) {
+  const { data, setData } = useContext(PracticeContext)
+  const DataContext = createContext();
+  const [dataRewards, setDataRewards] = useState('default data');
   const [label, setLabel] = useState('None');
   const { colors } = useTheme();
   const [loaded] = useFonts({
@@ -197,8 +202,11 @@ function ShopScreen(props) {
       console.log(prevCount - price);
       return prevCount - price;
     });
+    setData(label)
     Alert.alert(label);
     setLabel(label);
+    //setDataRewards('new data from FirstPage');
+    console.log("ShopData is" + data )
   };
 
   
@@ -213,11 +221,13 @@ function ShopScreen(props) {
         <Text style={[{ fontFamily: 'Jelly' }, styles.caption]}>Greetings, buy stuff here!</Text>
 
         <ScrollView style={styles.scrollView}>
+        <DataContext.Provider value={{ dataRewards, setDataRewards }}>
           <View style={styles.itemsContainer}>
             <Col1 onPress2={onPress2} />
             <Col2 onPress2={onPress2} />
             <Col3 onPress2={onPress2} />
           </View>
+        </DataContext.Provider>
         </ScrollView>
 
         <Text style={[{ fontFamily: 'Jelly' }, styles.lastCaption]}>Last Obtained: {label} </Text>
