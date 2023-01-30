@@ -9,14 +9,22 @@ import "firebase/firestore";
 
 
 function MoneyTrack() {
-  const [coins, setCoins] = useState(0);
+  const [coins, setCoins] = useState(100);
+
+  function updateCoins(newCoins) {
+    docRef.update({coin: newCoins})
+  }
 
   useEffect(() => {
     const collectionRef = firebase.firestore().collection("users");
     const docRef = collectionRef.doc(firebase.auth().currentUser.uid);
     docRef.get().then(doc => {
       if (doc.exists) {
-        setCoins(doc.data().coin);
+        if (doc.data().coin == undefined){
+          setCoins(100);
+          updateCoins(100);
+        }
+        else setCoins(doc.data().coin);
       }
     });
   }, []);

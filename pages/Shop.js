@@ -8,7 +8,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import Constants from 'expo-constants';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 //import MoneyTrack from './MoneyTrack.js';
@@ -19,89 +19,97 @@ import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 
 
 
-import MoneyTrack from '../pages/MoneyTrack.js';
+import MoneyTrack from './MoneyTrack.js';
 //const image = { uri: "https://reactjs.org/logo-og.png" };
 import { useFonts } from 'expo-font';
 
 //import ImageBg from './imagesBg.js';
 
-const Item = ({ price, color, onPress }) => {
+const Item = ({ price, color, onPress2 }) => {
   return (
+
     <TouchableOpacity
-      onPress={onPress}
-      style={[styles.itemContainer, { backgroundColor: color }]}>
-      <Text style={styles.itemPrice}>{price}$</Text>
+
+      style={[styles.itemContainer, { backgroundColor: color }]}
+      onPress={() => onPress2(price)}
+
+    >
+
+      <Text style={styles.itemPrice} >{price}$</Text>
       <Icon
+
         style={styles.itemIcon}
         name="treasure-chest"
         size={20}
         color="white"
       />
+
     </TouchableOpacity>
+
   );
 };
 
-const Col1 = () => {
+const Col1 = ({onPress2}) => {
   return (
     <View style={styles.colContainer}>
       <Item
         price="40"
         color="black"
-        onPress={() => console.log('item1 pressed')}
+        onPress2={onPress2}
       />
       <Item
         price="60"
         color="green"
-        onPress={() => console.log('item2 pressed')}
+        onPress2={onPress2}
       />
       <Item
         price="80"
         color="violet"
-        onPress={() => console.log('item3 pressed')}
+        onPress2={onPress2}
       />
       <Item
         price="200"
         color="orange"
-        onPress={() => console.log('item4 pressed')}
+        onPress2={onPress2}
       />
       <Item
         price="400"
         color="darkgrey"
-        onPress={() => console.log('item5 pressed')}
+        onPress2={onPress2}
       />
     </View>
   );
 };
 
-const Col2 = () => {
+const Col2 = ({onPress2}) => {
   return (
     <View style={styles.colContainer}>
-      <TouchableOpacity>
-        <Item
-          price="40"
-          color="red"
-          onPress={() => console.log('item1 pressed')}
-        />
-      </TouchableOpacity>
+
+      <Item
+        price="40"
+        color="red"
+        onPress={onPress2}
+      />
+
       <Item
         price="60"
         color="brown"
-        onPress={() => console.log('item2 pressed')}
+        onPress={onPress2}
       />
       <Item
         price="80"
         color="purple"
-        onPress={() => console.log('item3 pressed')}
+        onPress={onPress2}
       />
       <Item
         price="300"
         color="darkorange"
-        onPress={() => console.log('item4 pressed')}
+        onPress={onPress2}
       />
       <Item
         price="800"
         color="black"
-        onPress={() => console.log('item5 pressed')}
+        onPress={onPress2}
       />
     </View>
   );
@@ -113,30 +121,37 @@ function ShopScreen(props) {
     Jelly: require('../assets/Jua-Regular.ttf'),
   });
 
+  const childRef = React.createRef();
+
   if (!loaded) {
     return null;
+  }
+
+  const onPress2 = (price) => {
+    console.log(price);
+    //console.log(childRef.current.setState)
+    //childRef.current.setState((state) => ({ setCoins: state.coins = state.coins - price }));
+    if(childRef.current) childRef.current.setState(prevState => ({ count: prevState.count + price }));
   }
 
   return (
     <>
       <SafeAreaView style={styles.container}>
         <View style={styles.containerM}>
-          <MoneyTrack />
+          <MoneyTrack ref={childRef} />
         </View>
 
-        <Text style={[{fontFamily: 'Jelly'}, styles.caption]}>Greetings, buy stuff here!</Text>
-        
-
+        <Text style={[{ fontFamily: 'Jelly' }, styles.caption]}>Greetings, buy stuff here!</Text>
 
         <ScrollView style={styles.scrollView}>
           <View style={styles.itemsContainer}>
-            <Col1 />
-            <Col1 />
-            <Col2 />
+            <Col1 onPress2={onPress2}  />
+            <Col1 onPress2={onPress2}  />
+            <Col2 onPress2={onPress2}  />
           </View>
         </ScrollView>
 
-        <Text style={[{fontFamily: 'Jelly'}, styles.lastCaption]}>Last Obtained: Sergeant</Text>
+        <Text style={[{ fontFamily: 'Jelly' }, styles.lastCaption]}>Last Obtained: Sergeant</Text>
       </SafeAreaView>
     </>
   );
@@ -159,7 +174,7 @@ const styles = StyleSheet.create({
 
   caption: {
     marginTop: 30,
-    
+
     //fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'center',
