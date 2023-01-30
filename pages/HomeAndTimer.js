@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Constants from 'expo-constants';
 
-import {auth} from '../firebase'
+
 
 //import DropDown from '../pages/DropDown.js';
 
@@ -17,7 +17,10 @@ import MoneyTrack from './MoneyTrack.js';
 
 import { useNavigation } from '@react-navigation/native';
 
-
+import firebase from "firebase/app";
+import {auth} from "../firebase";
+import "firebase/auth";
+import "firebase/firestore";
 
 function TimerScreen(props) {
   const [seconds, setSeconds] = useState(0);
@@ -33,7 +36,7 @@ function TimerScreen(props) {
     setSeconds((seconds) => 0);
   }
 
-  
+  var db = firebase.firestore();
 
   useEffect(() => {
     if (isRunning) {

@@ -30,17 +30,27 @@ const MoneyTrack = forwardRef((props, ref) => {
       if (doc.exists) {
         if (doc.data().coin == undefined){
           //setCoins(100);
-          console.log(coins)
-          docRef.update({coin: 100})
+          console.log("Nah"+coins)
+          docRef.update({coin: 200})
         }
-        else setCoins(doc.data().coin);
+        else {
+          console.log("storage has" + doc.data().coin)
+          setCoins(doc.data().coin);
+        }
       }
     });
-  }, []);
-
-  useEffect(() => {
-    console.log("Updating is" + coins);
   }, [coins]);
+
+  const updateCoins = (newCoins) => {
+    const collectionRef = firebase.firestore().collection("users");
+    const docRef = collectionRef.doc(firebase.auth().currentUser.uid);
+    docRef.update({ coin: newCoins });
+  }
+
+
+  /*useEffect(() => {
+    console.log("Updating is" + coins);
+  }, [coins]);*/
   
   return (
     

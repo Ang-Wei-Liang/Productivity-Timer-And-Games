@@ -47,9 +47,11 @@ const Item = ({ name, onPress, isSelected, onFavoritePress, navigation }) => {
 
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
         <Text style={style}>{name}</Text>
-        <View style={styles.starContainer}>
+        </View>
+        <View style={{ flex: 1, alignItems: 'flex-end'}}>
           <TouchableOpacity onPress={handlePress}>
             <MaterialCommunityIcons
               name="star"
@@ -103,7 +105,7 @@ function Rewards3Screen(props) {
     { id: '4', name: 'Donkey', isFavorite: false },
     { id: '5', name: 'Elle', isFavorite: false },
     { id: '6', name: 'Fred', isFavorite: false },
-    { id: '7', name: 'Gotham', isFavorite: false },
+    { id: '7', name: 'Goth', isFavorite: false },
     { id: '8', name: 'Harry', isFavorite: false },
     { id: '9', name: 'Igloo', isFavorite: false },
   ]);
@@ -228,12 +230,15 @@ const styles = StyleSheet.create({
 
   normal: {
     fontSize: 18,
-    color: 'white',
-    fontWeight: '300',
+    color: 'lightcyan',
+    fontWeight: '310',
+    marginLeft: 28
+     
+    
   },
 
   starContainer: {
-    marginLeft: 100,
+    
   },
 });
 

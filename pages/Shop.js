@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -8,7 +9,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import Constants from 'expo-constants';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Alert } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 //import MoneyTrack from './MoneyTrack.js';
@@ -27,128 +28,158 @@ import { useFonts } from 'expo-font';
 
 //import ImageBg from './imagesBg.js';
 
-const Item = ({ price, color, onPress2 }) => {
+const Item = ({ price, color, onPress2, label }) => {
+  const [clicked, setClicked] = useState(false);
   return (
 
     <TouchableOpacity
-
       style={[styles.itemContainer, { backgroundColor: color }]}
-      onPress={() => onPress2(price)}
+      disabled={clicked}
+      onPress={() => {
+        onPress2(price, label);
+        setClicked(!clicked);
+        
+      }}
     >
 
       <Text style={styles.itemPrice} >{price}$</Text>
-      <Icon
 
+      {clicked ? (
+       <Icon
+       style={styles.itemIcon}
+       name="check-circle"
+       size={28}
+       color="white"
+       />
+      ) : (
+        <Icon
         style={styles.itemIcon}
         name="treasure-chest"
-        size={20}
+        size={30}
         color="white"
       />
+      )}
+
 
     </TouchableOpacity>
 
   );
 };
 
-const Col1 = ({onPress2}) => {
+const Col1 = ({ onPress2 }) => {
   return (
     <View style={styles.colContainer}>
       <Item
         price="40"
         color="black"
         onPress2={onPress2}
+        label="Working 24/7"
       />
       <Item
         price="60"
         color="green"
         onPress2={onPress2}
+        label="Keep Imagining"
       />
       <Item
         price="80"
         color="violet"
         onPress2={onPress2}
+        label="Just Do It"
       />
       <Item
         price="200"
         color="orange"
         onPress2={onPress2}
+        label="Dream Big"
       />
       <Item
         price="400"
         color="darkgrey"
         onPress2={onPress2}
+        label="I'm Loving It"
       />
     </View>
   );
 };
 
-const Col2 = ({onPress2}) => {
+const Col2 = ({ onPress2 }) => {
   return (
     <View style={styles.colContainer}>
       <Item
-        price="1"
+        price="40"
+        color="black"
+        onPress2={onPress2}
+        label="Think Different"
+      />
+      <Item
+        price="60"
+        color="green"
+        onPress2={onPress2}
+        label="Use your brain"
+      />
+      <Item
+        price="80"
+        color="violet"
+        onPress2={onPress2}
+        label="Start Small"
+      />
+      <Item
+        price="200"
+        color="orange"
+        onPress2={onPress2}
+        label="Just Believe"
+      />
+      <Item
+        price="400"
+        color="darkgrey"
+        onPress2={onPress2}
+        label="Chill and Relax"
+      />
+    </View>
+  );
+};
+
+
+const Col3 = ({ onPress2 }) => {
+  return (
+    <View style={styles.colContainer}>
+      <Item
+        price="40"
         color="red"
         onPress2={onPress2}
+        label="I Am Me"
       />
       <Item
         price="60"
         color="brown"
         onPress2={onPress2}
+        label="Smile More"
       />
       <Item
         price="80"
         color="purple"
         onPress2={onPress2}
+        label="Act Now"
       />
       <Item
         price="300"
         color="darkorange"
         onPress2={onPress2}
+        label="Be Yourself"
       />
       <Item
         price="800"
         color="black"
         onPress2={onPress2}
+        label="I can and I will" //19 chars
       />
     </View>
   );
 };
-/*
-const Col2 = ({onPress2}) => {
-  return (
-    <View style={styles.colContainer}>
 
-      <Item
-        price="1"
-        color="red"
-        onPress={onPress2}
-      />
-
-      <Item
-        price="60"
-        color="brown"
-        onPress={onPress2}
-      />
-      <Item
-        price="80"
-        color="purple"
-        onPress={onPress2}
-      />
-      <Item
-        price="300"
-        color="darkorange"
-        onPress={onPress2}
-      />
-      <Item
-        price="800"
-        color="black"
-        onPress={onPress2}
-      />
-    </View>
-  );
-};
-*/
 function ShopScreen(props) {
+  const [label, setLabel] = useState('None');
   const { colors } = useTheme();
   const [loaded] = useFonts({
     Jelly: require('../assets/Jua-Regular.ttf'),
@@ -161,14 +192,16 @@ function ShopScreen(props) {
     return null;
   }
 
-  
-
-  const onPress2 = (price) => {
+  const onPress2 = (price, label) => {
     childRef.current.setCoins(prevCount => {
-    console.log(prevCount - price);
-    return prevCount - price;
+      console.log(prevCount - price);
+      return prevCount - price;
     });
-    };
+    Alert.alert(label);
+    setLabel(label);
+  };
+
+  
 
   return (
     <>
@@ -176,18 +209,18 @@ function ShopScreen(props) {
         <View style={styles.containerM}>
           <MoneyTrack ref={childRef} />
         </View>
-
+        
         <Text style={[{ fontFamily: 'Jelly' }, styles.caption]}>Greetings, buy stuff here!</Text>
 
         <ScrollView style={styles.scrollView}>
           <View style={styles.itemsContainer}>
             <Col1 onPress2={onPress2} />
-            <Col1 onPress2={onPress2} />
             <Col2 onPress2={onPress2} />
+            <Col3 onPress2={onPress2} />
           </View>
         </ScrollView>
 
-        <Text style={[{ fontFamily: 'Jelly' }, styles.lastCaption]}>Last Obtained: Sergeant</Text>
+        <Text style={[{ fontFamily: 'Jelly' }, styles.lastCaption]}>Last Obtained: {label} </Text>
       </SafeAreaView>
     </>
   );
