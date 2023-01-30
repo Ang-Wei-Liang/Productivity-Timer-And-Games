@@ -17,6 +17,8 @@ const MoneyTrack = forwardRef((props, ref) => {
     return { setCoins };
   });
 
+  console.log("Now Is" + coins);
+
   /*function updateCoins(newCoins) {
     docRef.update({coin: newCoins})
   }*/
@@ -35,10 +37,15 @@ const MoneyTrack = forwardRef((props, ref) => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    console.log("Updating is" + coins);
+  }, [coins]);
   
   return (
     
     <Stack spacing={4}>
+    
       <Button
         tintColor="black"
         title={`Coins: ${coins}`}
@@ -48,7 +55,7 @@ const MoneyTrack = forwardRef((props, ref) => {
         
       />
       {}
-      {console.log(coins)}
+      {console.log("In stack is"+coins)}
     </Stack>
   );
 });

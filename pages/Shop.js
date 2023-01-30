@@ -34,7 +34,6 @@ const Item = ({ price, color, onPress2 }) => {
 
       style={[styles.itemContainer, { backgroundColor: color }]}
       onPress={() => onPress2(price)}
-
     >
 
       <Text style={styles.itemPrice} >{price}$</Text>
@@ -51,7 +50,7 @@ const Item = ({ price, color, onPress2 }) => {
   );
 };
 
-const Col1 = ({ onPress2 }) => {
+const Col1 = ({onPress2}) => {
   return (
     <View style={styles.colContainer}>
       <Item
@@ -83,7 +82,39 @@ const Col1 = ({ onPress2 }) => {
   );
 };
 
-const Col2 = ({ onPress2 }) => {
+const Col2 = ({onPress2}) => {
+  return (
+    <View style={styles.colContainer}>
+      <Item
+        price="1"
+        color="red"
+        onPress2={onPress2}
+      />
+      <Item
+        price="60"
+        color="brown"
+        onPress2={onPress2}
+      />
+      <Item
+        price="80"
+        color="purple"
+        onPress2={onPress2}
+      />
+      <Item
+        price="300"
+        color="darkorange"
+        onPress2={onPress2}
+      />
+      <Item
+        price="800"
+        color="black"
+        onPress2={onPress2}
+      />
+    </View>
+  );
+};
+/*
+const Col2 = ({onPress2}) => {
   return (
     <View style={styles.colContainer}>
 
@@ -116,7 +147,7 @@ const Col2 = ({ onPress2 }) => {
     </View>
   );
 };
-
+*/
 function ShopScreen(props) {
   const { colors } = useTheme();
   const [loaded] = useFonts({
@@ -130,17 +161,7 @@ function ShopScreen(props) {
     return null;
   }
 
-  /*const onPress2 = (price) => {
-    console.log(price);
-    //console.log(childRef.current.setState)
-    //childRef.current.setState((state) => ({ setCoins: state.coins = state.coins - price }));
-    if (childRef.current) childRef.current.setState(prevState => ({ count: prevState.count + price }));
-  }*/
-
-  /*const onPress2 = (price) => {
-    childRef.current.setCoins(prevCount => prevCount +1);
-    
-  };*/
+  
 
   const onPress2 = (price) => {
     childRef.current.setCoins(prevCount => {

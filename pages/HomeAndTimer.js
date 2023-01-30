@@ -59,6 +59,7 @@ function TimerScreen(props) {
     <View style={styles.bothIcons}>
     <View style={styles.moneyIcon}>
     <MoneyTrack/>
+
     </View>
     <View style={styles.loginIcon}>
     
