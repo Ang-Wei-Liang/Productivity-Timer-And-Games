@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import {auth} from "../firebase";
-import {useNavigation} from "@react-navigation/native";
+import { auth } from "../firebase";
+import { useNavigation } from "@react-navigation/native";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
@@ -33,24 +33,25 @@ function SignUpPage(props) {
   }, []);
 
   const handleSignUp = async () => {
-    const userCredentials = await auth.createUserWithEmailAndPassword(email, password);
-    const user = userCredentials.user;
-    console.log("Registered with:", user.email);
+    try {
+      const userCredentials = await auth.createUserWithEmailAndPassword(email, password);
+      const user = userCredentials.user;
+      console.log("Registered with:", user.email);
 
-    // Create a reference to the Firestore collection
-    const collectionRef = firebase.firestore().collection("users");
-    collectionRef
-      .add({
-        email: user.email,
-        coin: 0,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      })
-      .then(function () {
-        alert("Account successfully created!");
-      })
-      .catch(function (error) {
-        alert.error("Error writing document: ", error);
-      });
+      // Create a reference to the Firestore collection
+      const collectionRef = firebase.firestore().collection("users");
+      collectionRef
+        .add({
+          email: user.email,
+          coin: 190,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+        .then(function () {
+          alert("Account successfully created!");
+        })
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   const handleLogin = async () => {
@@ -119,16 +120,16 @@ function SignUpPage(props) {
           <Text style={styles.textStyle}> Private Policy </Text>
         </Text>
 
-        <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity onPress={handleSignUp} style={styles.button1}>
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row' }}>
+          <TouchableOpacity onPress={handleSignUp} style={styles.button1}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleLogin} style={styles.button2}>
-          <Text style={styles.buttonText}>Sign In</Text>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={handleLogin} style={styles.button2}>
+            <Text style={styles.buttonText}>Sign In</Text>
+          </TouchableOpacity>
         </View>
-        
+
       </View>
     </TouchableWithoutFeedback>
   );
