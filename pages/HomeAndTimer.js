@@ -33,6 +33,8 @@ function TimerScreen(props) {
     setSeconds((seconds) => 0);
   }
 
+  
+
   useEffect(() => {
     if (isRunning) {
       interval = setInterval(() => {

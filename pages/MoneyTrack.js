@@ -7,13 +7,19 @@ import {auth} from "../firebase";
 import "firebase/auth";
 import "firebase/firestore";
 
+import { forwardRef, useImperativeHandle } from 'react';
 
-function MoneyTrack() {
+const MoneyTrack = forwardRef((props, ref) => { 
   const [coins, setCoins] = useState(100);
+//docRef.update({coin: coins})
+  useImperativeHandle(ref, () => {
+    
+    return { setCoins };
+  });
 
-  function updateCoins(newCoins) {
+  /*function updateCoins(newCoins) {
     docRef.update({coin: newCoins})
-  }
+  }*/
 
   useEffect(() => {
     const collectionRef = firebase.firestore().collection("users");
@@ -21,8 +27,9 @@ function MoneyTrack() {
     docRef.get().then(doc => {
       if (doc.exists) {
         if (doc.data().coin == undefined){
-          setCoins(100);
-          updateCoins(100);
+          //setCoins(100);
+          console.log(coins)
+          docRef.update({coin: 100})
         }
         else setCoins(doc.data().coin);
       }
@@ -30,6 +37,7 @@ function MoneyTrack() {
   }, []);
   
   return (
+    
     <Stack spacing={4}>
       <Button
         tintColor="black"
@@ -37,10 +45,13 @@ function MoneyTrack() {
         color="yellow"
         style={styles.containerG}
         leading={(props) => <Icon name="hand-coin" {...props} />}
+        
       />
+      {}
+      {console.log(coins)}
     </Stack>
   );
-}
+});
 
 const styles = StyleSheet.create({
   containerG: {

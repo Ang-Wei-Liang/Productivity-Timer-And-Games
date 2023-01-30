@@ -13,6 +13,8 @@ import { useTheme } from 'react-native-paper';
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 //import MoneyTrack from './MoneyTrack.js';
 
+import { forwardRef, useRef } from 'react';
+
 //import {Divider} from '@rneui/themed';
 
 
@@ -49,7 +51,7 @@ const Item = ({ price, color, onPress2 }) => {
   );
 };
 
-const Col1 = ({onPress2}) => {
+const Col1 = ({ onPress2 }) => {
   return (
     <View style={styles.colContainer}>
       <Item
@@ -81,12 +83,12 @@ const Col1 = ({onPress2}) => {
   );
 };
 
-const Col2 = ({onPress2}) => {
+const Col2 = ({ onPress2 }) => {
   return (
     <View style={styles.colContainer}>
 
       <Item
-        price="40"
+        price="1"
         color="red"
         onPress={onPress2}
       />
@@ -121,18 +123,31 @@ function ShopScreen(props) {
     Jelly: require('../assets/Jua-Regular.ttf'),
   });
 
-  const childRef = React.createRef();
+  const childRef = useRef(null);
+  //const childRef = React.createRef();
 
   if (!loaded) {
     return null;
   }
 
-  const onPress2 = (price) => {
+  /*const onPress2 = (price) => {
     console.log(price);
     //console.log(childRef.current.setState)
     //childRef.current.setState((state) => ({ setCoins: state.coins = state.coins - price }));
-    if(childRef.current) childRef.current.setState(prevState => ({ count: prevState.count + price }));
-  }
+    if (childRef.current) childRef.current.setState(prevState => ({ count: prevState.count + price }));
+  }*/
+
+  /*const onPress2 = (price) => {
+    childRef.current.setCoins(prevCount => prevCount +1);
+    
+  };*/
+
+  const onPress2 = (price) => {
+    childRef.current.setCoins(prevCount => {
+    console.log(prevCount - price);
+    return prevCount - price;
+    });
+    };
 
   return (
     <>
@@ -145,9 +160,9 @@ function ShopScreen(props) {
 
         <ScrollView style={styles.scrollView}>
           <View style={styles.itemsContainer}>
-            <Col1 onPress2={onPress2}  />
-            <Col1 onPress2={onPress2}  />
-            <Col2 onPress2={onPress2}  />
+            <Col1 onPress2={onPress2} />
+            <Col1 onPress2={onPress2} />
+            <Col2 onPress2={onPress2} />
           </View>
         </ScrollView>
 
