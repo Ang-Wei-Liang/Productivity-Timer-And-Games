@@ -15,8 +15,15 @@ import { useNavigation } from "@react-navigation/native";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import { useFonts } from 'expo-font';
 
 function SignUpPage(props) {
+  const [loaded] = useFonts({
+    Brush: require('../assets/PermanentMarker-Regular.ttf'),
+  });
+  if (!loaded) {
+    return null;
+  }
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -96,6 +103,7 @@ function SignUpPage(props) {
       }}
     >
       <View style={styles.container}>
+      <Text style={[{ fontFamily: 'Brush' }, styles.title]}>Produktivity</Text>
         <Icon name="rocket" size={32} color="#900" />
 
         <Text style={styles.containerTitles}> Email </Text>
@@ -156,12 +164,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    marginBottom: 100,
-    marginRight: 190,
+    textAlign: 'center',
+    marginBottom: 82,
+    //marginRight: 190,
     /*position: 'absolute',
     top: 80,
     right: 200,*/
-    fontWeight: "bold",
+    //fontWeight: "bold",
   },
   input: {
     width: "80%",
