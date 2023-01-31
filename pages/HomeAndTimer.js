@@ -18,7 +18,7 @@ import MoneyTrack from './MoneyTrack.js';
 import { useNavigation } from '@react-navigation/native';
 
 import firebase from "firebase/app";
-import {auth} from "../firebase";
+import {auth, db} from "../firebase";
 import "firebase/auth";
 import "firebase/firestore";
 
@@ -36,7 +36,7 @@ function TimerScreen(props) {
     setSeconds((seconds) => 0);
   }
 
-  var db = firebase.firestore();
+  //var db = firebase.firestore();
 
   useEffect(() => {
     if (isRunning) {

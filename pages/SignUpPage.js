@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { useNavigation } from "@react-navigation/native";
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -18,16 +18,13 @@ import "firebase/firestore";
 import { useFonts } from 'expo-font';
 
 function SignUpPage(props) {
-  const [loaded] = useFonts({
-    Brush: require('../assets/PermanentMarker-Regular.ttf'),
-  });
-  if (!loaded) {
-    return null;
-  }
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigation = useNavigation();
+
+  
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -46,7 +43,7 @@ function SignUpPage(props) {
       console.log("Registered with:", user.email);
 
       // Create a reference to the Firestore collection
-      const collectionRef = firebase.firestore().collection("users");
+      const collectionRef = db.collection("users"); //db=firebase.firestore()
       collectionRef
         .add({
           email: user.email,
@@ -103,7 +100,7 @@ function SignUpPage(props) {
       }}
     >
       <View style={styles.container}>
-      <Text style={[{ fontFamily: 'Brush' }, styles.title]}>Produktivity</Text>
+      <Text style={styles.title}>Produktivity</Text>
         <Icon name="rocket" size={32} color="#900" />
 
         <Text style={styles.containerTitles}> Email </Text>

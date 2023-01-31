@@ -86,3 +86,10 @@ function MainScreen(props) {
   )};
 
   export default MainScreen;
+
+
+  useEffect(() => {
+  docRef.onSnapshot(doc => {
+    setCoinValue(doc.data().coin);
+  }
+  });

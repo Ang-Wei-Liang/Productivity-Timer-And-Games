@@ -38,8 +38,10 @@ const Item = ({ price, color, onPress2, label }) => {
       style={[styles.itemContainer, { backgroundColor: color }]}
       disabled={clicked}
       onPress={() => {
-        onPress2(price, label);
         setClicked(!clicked);
+        console.log(clicked)
+        onPress2(price, label);
+        
         
       }}
     >

@@ -3,54 +3,110 @@ import {StyleSheet, Text, View, TouchableOpacity} from "react-native";
 import {Stack, Button, IconComponentProvider} from "@react-native-material/core";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import firebase from "firebase/app";
-import {auth} from "../firebase";
+import {auth,db} from "../firebase";
 import "firebase/auth";
 import "firebase/firestore";
 
 import { forwardRef, useImperativeHandle } from 'react';
 
-const MoneyTrack = forwardRef((props, ref) => { 
-  const [coins, setCoins] = useState(100);
-//docRef.update({coin: coins})
+
+
+  
+  const MoneyTrack = forwardRef((props, ref) => { 
+    const [coins, setCoins] = useState(100);
+  //docRef.update({coin: coins})
+  
   useImperativeHandle(ref, () => {
-    
     return { setCoins };
   });
 
-  console.log("Now Is" + coins);
+  useEffect(() => {
+    const collectionRef = db.collection("users");
+    const docRef = collectionRef.doc(auth.currentUser.uid);
+
+    let isSubscribed = true;
+
+    docRef.get().then(doc => {
+      if (doc.exists) {
+        if (doc.data().coin == undefined) {
+          setCoins(200);
+          console.log("New user, now " + coins + " coins");
+          docRef.update({ coin: 200 });
+        } else {
+          console.log("storage has " + doc.data().coin);
+          setCoins(doc.data().coin);
+        }
+      }
+    });
+
+    docRef.onSnapshot(doc => {
+      if (isSubscribed) {
+        setCoins(doc.data().coin);
+      }
+    });
+    return () => {
+      isSubscribed = false;
+    };
+  }, []);
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //let isSubscribed = true;
+  //console.log("Now Is" + coins);
 
   /*function updateCoins(newCoins) {
     docRef.update({coin: newCoins})
   }*/
 
+  //useEffect(() => {
+    //const collectionRef = db.collection("users"); //db is firebase.firestore()
+    //const docRef = collectionRef.doc(auth.currentUser.uid);
+    //docRef.get().then(doc => {
+      //if (doc.exists) {
+        //if (doc.data().coin == undefined){
+          //setCoins(200);
+          //console.log("New user, now"+coins+"coins")
+          //docRef.update({coin: 200})
+        //}
+        //else {
+          //console.log("storage has" + doc.data().coin)
+          //setCoins(doc.data().coin);
+        //}
+      //}
+    //});
+  //}, []);
+
+  //useEffect(() => {
+    //const collectionRef = db.collection("users");
+    //const docRef = collectionRef.doc(auth.currentUser.uid);
+    
+    //docRef.onSnapshot(doc => {
+      //if (isSubscribed) {
+        //setCoins(doc.data().coin);
+      //}
+    //});
+    //return () => {
+      //isSubscribed = false;
+    //};
+  //}, []);
+
   useEffect(() => {
-    const collectionRef = firebase.firestore().collection("users");
-    const docRef = collectionRef.doc(firebase.auth().currentUser.uid);
-    docRef.get().then(doc => {
-      if (doc.exists) {
-        if (doc.data().coin == undefined){
-          //setCoins(100);
-          console.log("Nah"+coins)
-          docRef.update({coin: 200})
-        }
-        else {
-          console.log("storage has" + doc.data().coin)
-          setCoins(doc.data().coin);
-        }
-      }
-    });
+    const collectionRef = db.collection("users");
+    const docRef = collectionRef.doc(auth.currentUser.uid);
+    docRef.update({coin: coins});
   }, [coins]);
-
-  const updateCoins = (newCoins) => {
-    const collectionRef = firebase.firestore().collection("users");
-    const docRef = collectionRef.doc(firebase.auth().currentUser.uid);
-    docRef.update({ coin: newCoins });
-  }
-
-
-  /*useEffect(() => {
-    console.log("Updating is" + coins);
-  }, [coins]);*/
+  
+    
   
   return (
     
@@ -64,7 +120,7 @@ const MoneyTrack = forwardRef((props, ref) => {
         leading={(props) => <Icon name="hand-coin" {...props} />}
         
       />
-      {}
+
       {console.log("In stack is"+coins)}
     </Stack>
   );
