@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import {useState, useEffect, useRef} from "react";
+import {View, Text, StyleSheet, Image, TouchableOpacity} from "react-native";
 const SNAKE_MOVEMENT_INTERVAL = 300;
 
 const DIRECTION_EAST = 0;
@@ -23,6 +23,12 @@ function SnakeGame() {
         x: 4,
         y: 4,
       },
+      body: [
+        {
+          x: 4,
+          y: 3,
+        },
+      ],
     },
     food: {
       x: Math.floor(Math.random() * 9),
@@ -34,8 +40,8 @@ function SnakeGame() {
 
   function updateGameState() {
     var snake = gameState.snake;
-
     var snakeHead = snake.head;
+    var newSnakeBody = [...snake.body];
 
     if (snakeDirection == DIRECTION_EAST) {
       snakeHead.y = (snakeHead.y + 1) % 9;
@@ -54,42 +60,36 @@ function SnakeGame() {
         snakeHead.x = 8;
       }
     }
-
     snake.head = snakeHead;
+    newSnakeBody.unshift({
+      x: snakeHead.x,
+      y: snakeHead.y,
+    });
+    newSnakeBody.pop();
 
     var food = gameState.food;
 
-    setGameState({
-      snake: snake,
-      food: food,
-    });
-    function createNode(x, y, direction) {
-      var node = {};
-      node.next = null;
-      node.prev = null;
-      node.x = x;
-      node.y = y;
-      node.direction = direction;
-      return node;
-    }
-
-    function updateGrid(grid, snake) {
-      var x = snake.head.x;
-      var y = snake.head.y;
-      grid[x][y] = GRID_HEAD;
-      var currentNode = snake.head.next;
-      while (currentNode !== null) {
-        x = currentNode.x;
-        y = currentNode.y;
-        grid[x][y] = GRID_BODY;
-        currentNode = currentNode.next;
-      }
-    }
     if (snakeHead.x === food.x && snakeHead.y === food.y) {
       setFoodCount(foodCount + 1);
       food.x = Math.floor(Math.random() * 9);
       food.y = Math.floor(Math.random() * 9);
+
+      newSnakeBody.push({
+        x: snakeHead.x,
+        y: snakeHead.y,
+      });
     }
+
+    setGameState({
+      snake: {
+        head: {
+          x: snakeHead.x,
+          y: snakeHead.y,
+        },
+        body: newSnakeBody,
+      },
+      food: food,
+    });
   }
 
   function Draw() {
@@ -97,33 +97,33 @@ function SnakeGame() {
       .fill(0)
       .map((row) => new Array(9).fill(0));
     var snakeHead = gameState.snake.head;
+    var snakeBody = gameState.snake.body;
     var food = gameState.food;
     board[snakeHead.x][snakeHead.y] = GRID_HEAD;
+    snakeBody.forEach((element, index) => {
+      if (index === 0) {
+        board[element.x][element.y] = GRID_HEAD;
+      } else {
+        board[element.x][element.y] = GRID_BODY;
+      }
+    });
     board[food.x][food.y] = GRID_FOOD;
 
     return (
       <>
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           {board.map((row, rowIndex) => {
             return (
               <View style={styles.gridRow} key={rowIndex}>
                 {row.map((item, itemIndex) => {
                   if (item === GRID_EMPTY) {
-                    return (
-                      <View style={styles.gridItemEmpty} key={itemIndex}></View>
-                    );
+                    return <View style={styles.gridItemEmpty} key={itemIndex}></View>;
                   } else if (item === GRID_BODY) {
-                    return (
-                      <View style={styles.gridItemBody} key={itemIndex}></View>
-                    );
+                    return <View style={styles.gridItemBody} key={itemIndex}></View>;
                   } else if (item === GRID_HEAD) {
-                    return (
-                      <View style={styles.gridItemHead} key={itemIndex}></View>
-                    );
+                    return <View style={styles.gridItemHead} key={itemIndex}></View>;
                   } else {
-                    return (
-                      <View style={styles.gridItemFood} key={itemIndex}></View>
-                    );
+                    return <View style={styles.gridItemFood} key={itemIndex}></View>;
                   }
                 })}
               </View>
@@ -159,10 +159,9 @@ function SnakeGame() {
               onPress={() => {
                 setSnakeDirection(DIRECTION_NORTH);
               }}
-              style={{ alignItems: 'center' }}>
-              <Image
-                style={styles.arrowImage}
-                source={require('../assets/arrow.png')}></Image>
+              style={{alignItems: "center"}}
+            >
+              <Image style={styles.arrowImage} source={require("../assets/arrow.png")}></Image>
             </TouchableOpacity>
           </View>
           <View style={styles.arrowDownContainer}>
@@ -170,10 +169,9 @@ function SnakeGame() {
               onPress={() => {
                 setSnakeDirection(DIRECTION_SOUTH);
               }}
-              style={{ alignItems: 'center' }}>
-              <Image
-                style={styles.arrowImage}
-                source={require('../assets/arrow.png')}></Image>
+              style={{alignItems: "center"}}
+            >
+              <Image style={styles.arrowImage} source={require("../assets/arrow.png")}></Image>
             </TouchableOpacity>
           </View>
           <View style={styles.arrowLeftContainer}>
@@ -181,10 +179,9 @@ function SnakeGame() {
               onPress={() => {
                 setSnakeDirection(DIRECTION_WEST);
               }}
-              style={{ alignItems: 'center' }}>
-              <Image
-                style={styles.arrowImage}
-                source={require('../assets/arrow.png')}></Image>
+              style={{alignItems: "center"}}
+            >
+              <Image style={styles.arrowImage} source={require("../assets/arrow.png")}></Image>
             </TouchableOpacity>
           </View>
           <View style={styles.arrowRightContainer}>
@@ -192,10 +189,9 @@ function SnakeGame() {
               onPress={() => {
                 setSnakeDirection(DIRECTION_EAST);
               }}
-              style={{ alignItems: 'center' }}>
-              <Image
-                style={styles.arrowImage}
-                source={require('../assets/arrow.png')}></Image>
+              style={{alignItems: "center"}}
+            >
+              <Image style={styles.arrowImage} source={require("../assets/arrow.png")}></Image>
             </TouchableOpacity>
           </View>
         </View>
@@ -207,7 +203,7 @@ function SnakeGame() {
 const styles = StyleSheet.create({
   outercontainer: {
     flex: 1,
-    position: 'relative',
+    position: "relative",
     left: 20,
     top: 20,
 
@@ -220,34 +216,34 @@ const styles = StyleSheet.create({
     borderRightWidth: 2,
     borderBottomWidth: 2,
     borderLeftWidth: 2,
-    borderColor: 'red',
-    borderStyle: 'solid',
+    borderColor: "red",
+    borderStyle: "solid",
     //justifyContent: 'center'
     marginLeft: 30,
   },
   gridRow: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   gridItemEmpty: {
     flex: 1,
     margin: 1,
-    backgroundColor: 'black',
+    backgroundColor: "black",
   },
   gridItemBody: {
     flex: 1,
     margin: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   gridItemHead: {
     flex: 1,
     margin: 1,
-    backgroundColor: 'yellow',
+    backgroundColor: "yellow",
   },
   gridItemFood: {
     flex: 1,
     margin: 1,
-    backgroundColor: 'red',
+    backgroundColor: "red",
   },
   money: {
     //paddingBottom: 200,
@@ -259,7 +255,7 @@ const styles = StyleSheet.create({
   },
   dropMoney: {
     //marginBottom: 10,
-    backgroundColor: '',
+    backgroundColor: "",
     //height: 180
   },
   drop: {
@@ -275,55 +271,55 @@ const styles = StyleSheet.create({
     right: 60,*/
 
     fontSize: 30,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   arrowContainer: {
     width: 100,
     height: 100,
     marginLeft: 130,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
     bottom: 45,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   arrowUpContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
     top: -20,
     left: 25,
-    transform: [{ rotate: '90deg' }],
+    transform: [{rotate: "90deg"}],
   },
   arrowLeftContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
     top: 25,
     left: -20,
-    transform: [{ rotate: '0deg' }],
+    transform: [{rotate: "0deg"}],
   },
   arrowDownContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
     top: 70,
     left: 25,
-    transform: [{ rotate: '270deg' }],
+    transform: [{rotate: "270deg"}],
   },
   arrowRightContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
     top: 25,
     left: 70,
-    transform: [{ rotate: '180deg' }],
+    transform: [{rotate: "180deg"}],
   },
   arrowImage: {
     width: 60,
     height: 60,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
 });
 export default SnakeGame;
