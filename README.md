@@ -2,7 +2,6 @@
 # Productivity Timer And Games
 
 Ever find yourself Prcastinating? Here is an app to manage your time, yet still distracting you to play games! The ultimate test for self control! 🌈
----
 
 ### 🖼️ App Previews
 
