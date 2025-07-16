@@ -1,8 +1,8 @@
 
 # Productivity Timer And Games
 
-Ever find yourself Prcastinating? Here is an app to manage your time, yet still distracting you since you to play games! The ultimate test for self control! 🌈
-
+Ever find yourself Prcastinating? Here is an app to manage your time, yet still distracting you to play games! The ultimate test for self control! 🌈
+---
 
 ### 🖼️ App Previews
 
@@ -19,11 +19,13 @@ Ever find yourself Prcastinating? Here is an app to manage your time, yet still 
   <img height="300" alt="image" src="https://github.com/user-attachments/assets/c3d4b03a-622e-48aa-9346-41b2b0ce27f8" />
 </div>
 
+---
 
 ## Authors
 - [@CharmTzy](https://www.github.com/CharmTzy)
 - [@Ang-Wei-Liang](https://www.github.com/Ang-Wei-Liang)
 
+---
 
 # Sample Snack app
 
