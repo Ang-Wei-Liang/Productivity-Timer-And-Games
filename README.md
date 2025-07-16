@@ -6,6 +6,18 @@ Ever find yourself Prcastinating? Here is an app to manage your time, yet still 
 
 ### 🖼️ App Previews
 
+<div align="center">
+  <img height="300" alt="image" src="https://github.com/user-attachments/assets/586d458c-07f5-4d29-aaf2-70d9b2cbf45d" />
+  <img height="300" alt="image" src="https://github.com/user-attachments/assets/ef94ebb4-8fed-4a19-ac79-b639da5c53f1" />
+  <img height="300" alt="image" src="https://github.com/user-attachments/assets/91444fdd-3d49-445d-9bd5-21ce4f4694bf" />
+</div>
+
+<div align="center">
+  <img height="300" alt="image" src="https://github.com/user-attachments/assets/c4b2779b-31d4-471d-80fc-2e6573c7df74" />
+  <img height="300" alt="image" src="https://github.com/user-attachments/assets/a0b4bb6b-1a0d-4b84-aebe-4a29eee2a4e6" />
+  <img height="300" alt="image" src="https://github.com/user-attachments/assets/ad938543-7a9d-4cd9-9d42-be5d9d14d477" />
+  <img height="300" alt="image" src="https://github.com/user-attachments/assets/c3d4b03a-622e-48aa-9346-41b2b0ce27f8" />
+</div>
 
 
 ## Authors
